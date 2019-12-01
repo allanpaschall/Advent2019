@@ -1,1 +1,3 @@
-Use this for your own solutions. Feel free to make subfolders.
+# Advent
+
+Code for the 2019 Advent of Code contest.
