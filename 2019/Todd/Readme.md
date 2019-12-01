@@ -1,0 +1,1 @@
+Use this for your own solutions. Feel free to make subfolders.
