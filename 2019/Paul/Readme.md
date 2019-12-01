@@ -1,1 +1,1 @@
-Use this for your own solutions. Feel free to make subfolders.
+https://github.com/genuineBuildMonkey/advent-2019/tree/master/day1
