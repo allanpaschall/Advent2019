@@ -1,1 +1,1 @@
-https://github.com/genuineBuildMonkey/advent-2019/tree/master/day1
+https://github.com/genuineBuildMonkey/advent-2019/
