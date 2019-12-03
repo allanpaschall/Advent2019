@@ -4,12 +4,19 @@
   "description": "Node project for the Advent of Code 2019",
   "main": "index.js",
   "scripts": {
-    "start": "node_modules/.bin/node ",
+    "start": "node_modules/.bin/babel-node ",
     "test": "node_modules/.bin/jest"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/cli": "^7.7.4",
+    "@babel/core": "^7.7.4",
+    "@babel/preset-env": "^7.7.4",
+    "babel-jest": "^24.9.0",
     "jest": "^24.9.0"
+  },
+  "dependencies": {
+    "@babel/node": "^7.7.4"
   }
 }
