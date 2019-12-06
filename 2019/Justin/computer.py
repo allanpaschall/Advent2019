@@ -17,9 +17,11 @@ def comp(compList, inputVal):
             return compList
 
         # No getter, One setter
-        # takes a single integer as input and saves it to the position given by its only parameter
+        setter = compList[pos + 1]
+
+        # OP takes a single integer as input and saves it to the position given by its only parameter
         if (operation == 3):
-            compList[compList[pos + 1]] = inputVal
+            compList[setter] = inputVal
             pos+=2
             continue
         
@@ -29,7 +31,7 @@ def comp(compList, inputVal):
         elif modes[0] == 1:
             param1 = compList[pos+1]
         
-        # outputs the value of its only parameter
+        # OP outputs the value of its only parameter
         if (operation == 4):
             print("Output: " + str(param1))
             pos+=2
@@ -41,7 +43,7 @@ def comp(compList, inputVal):
         elif modes[1] == 1:
             param2 = compList[pos+2]
 
-        # jump-if-true: if the first parameter is non-zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
+        # OP jump-if-true: if the first parameter is non-zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
         if (operation == 5):
             if param1 != 0:
                 pos = param2
@@ -49,7 +51,7 @@ def comp(compList, inputVal):
                 pos+=3
             continue
 
-        # jump-if-false: if the first parameter is zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
+        # OP jump-if-false: if the first parameter is zero, it sets the instruction pointer to the value from the second parameter. Otherwise, it does nothing.
         if (operation == 6):
             if param1 == 0:
                 pos = param2
@@ -58,27 +60,28 @@ def comp(compList, inputVal):
             continue
         
         # Two getters, one setter
-        # adds together numbers read from two positions and stores the result in a third position
+        setter = compList[pos+3]
+        # OP adds together numbers read from two positions and stores the result in a third position
         if (operation == 1):
-            compList[compList[pos+3]] = param1 + param2
+            compList[setter] = param1 + param2
             pos+=4
             continue
 
-        # multiplies together numbers read from two positions and stores the result in a third position
+        # OP multiplies together numbers read from two positions and stores the result in a third position
         if (operation == 2):
-            compList[compList[pos+3]] = param1 * param2
+            compList[setter] = param1 * param2
             pos+=4
             continue
 
-        # less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
+        # OP less than: if the first parameter is less than the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
         if (operation == 7):
-            compList[compList[pos+3]] = 1 if param1 < param2 else 0
+            compList[setter] = 1 if param1 < param2 else 0
             pos+=4
             continue
 
-        # equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
+        # OP equals: if the first parameter is equal to the second parameter, it stores 1 in the position given by the third parameter. Otherwise, it stores 0.
         if (operation == 8):
-            compList[compList[pos+3]] = 1 if param1 == param2 else 0
+            compList[setter] = 1 if param1 == param2 else 0
             pos+=4
             continue
         
