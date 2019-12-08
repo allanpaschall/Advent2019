@@ -1,6 +1,8 @@
 def comp(compList, inputVal):
     compList = compList.copy()
     pos = 0
+    output = []
+    inputPos = 0
     while pos <= len(compList)-1:
         op = str(compList[pos])
         operation = 98
@@ -14,14 +16,20 @@ def comp(compList, inputVal):
         # No params
         # Exit op
         if (operation == 99):
-            return compList
+            print("done")
+            return [], output
 
         # No getter, One setter
         setter = compList[pos + 1]
 
         # OP takes a single integer as input and saves it to the position given by its only parameter
         if (operation == 3):
-            compList[setter] = inputVal
+            try:
+                compList[setter] = inputVal[inputPos]
+            except:
+                return compList, output
+            # if len(inputVal) > 1:
+            #     inputPos += 1
             pos+=2
             continue
         
@@ -33,7 +41,10 @@ def comp(compList, inputVal):
         
         # OP outputs the value of its only parameter
         if (operation == 4):
-            print("Output: " + str(param1))
+            print("Output: ", param1)
+            # print(param1)
+            # return compList, output
+            output.append(param1)
             pos+=2
             continue
 
@@ -69,6 +80,10 @@ def comp(compList, inputVal):
 
         # OP multiplies together numbers read from two positions and stores the result in a third position
         if (operation == 2):
+            # print(compList)
+            # print("Op 2")
+            # print("Param 1 ",param1)
+            # print("Param 2 ",param2)
             compList[setter] = param1 * param2
             pos+=4
             continue
@@ -85,4 +100,4 @@ def comp(compList, inputVal):
             pos+=4
             continue
         
-    return compList
+    return compList, output
