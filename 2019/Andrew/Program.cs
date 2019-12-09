@@ -15,6 +15,7 @@ namespace AoC2019
             new Day6().Run();
             new Day7().Run();
             new Day8().Run(5);
+            new Day9().Run();
             Console.WriteLine("\r\nCompleted!");
             //Console.ReadLine();
         }
