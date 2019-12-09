@@ -30,8 +30,8 @@ namespace AoC2019
                     p2++;
                 }
             }
-            Console.WriteLine("Part 1:" + p1);
-            Console.WriteLine("Part 2:" + p2);
+            Console.WriteLine("Day 04,P1:" + p1);
+            Console.WriteLine("Day 04,P2:" + p2);
         }
     }
 }
