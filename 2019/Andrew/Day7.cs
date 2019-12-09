@@ -10,236 +10,65 @@ namespace AoC2019
         }
         public void Run()
         {
-            //Part1();
+            Part1();
             Part2();
         }
         public void Part1()
         {
-            Dictionary<int, int[]> attempts = new Dictionary<int, int[]>();
-            for (int a = 0; a <= 4; a++)
+            List<int> attempts2 = new List<int>();
+            Indexes.ToList().ForEach(i =>
             {
-                for (int b = 0; b <= 4; b++)
+                var data = (int[])Data.Clone();
+                var output = 0;
+                for (int k = 0; k < 5; k++)
                 {
-                    for (int c = 0; c <= 4; c++)
-                    {
-                        for (int d = 0; d <= 4; d++)
-                        {
-                            for (int e = 0; e <= 4; e++)
-                            {
-                                if (a==b || a==c || a==d || a==e || b==c || b==d || b==e || c==d || c==e || d==e)
-                                {
-                                    continue;
-                                }
-                                var data = (int[])Data.Clone();
-                                var output = 0;
-                                output = IntcodeComputer(data, new int[] { a, output });
-                                output = IntcodeComputer(data, new int[] { b, output });
-                                output = IntcodeComputer(data, new int[] { c, output });
-                                output = IntcodeComputer(data, new int[] { d, output });
-                                output = IntcodeComputer(data, new int[] { e, output });
-                                if (!attempts.ContainsKey(output))
-                                {
-                                    attempts[output] = new int[] { a, b, c, d, e };
-                                }
-                            }
-                        }
-                    }
+                    var ic = new IntCode(Data);
+                    ic.Input.Enqueue(
+                        (k==0 ? i / 10000 :
+                        (k==1 ? i / 1000 :
+                        (k==2 ? i / 100 :
+                        (k==3 ? i / 10 :
+                        /*k==4*/i      )))) % 10);
+                    ic.Input.Enqueue(output);
+                    ic.Run();
+                    output = ic.Output.Dequeue();
                 }
-            }
-            var best = (from att in attempts orderby att.Key descending select att).First();
-            Console.WriteLine("Best:" + best.Key + "," +  best.Value[0] + best.Value[1] + best.Value[2] + best.Value[3] + best.Value[4]);
+                attempts2.Add(output);
+            });
+            Console.WriteLine("Day 07,P1:" + (from att in attempts2 orderby att descending select att).First());
         }
         public void Part2()
         {
-            Dictionary<int, int[]> attempts = new Dictionary<int, int[]>();
-            for (int a = 5; a <= 9; a++)
+            List<int> attempts2 = new List<int>();
+            HighIndexes.ToList().ForEach(i =>
             {
-                for (int b = 5; b <= 9; b++)
+                IntCode[] intCodes = { new IntCode(Data), new IntCode(Data), new IntCode(Data), new IntCode(Data), new IntCode(Data) };
+                intCodes[0].Input.Enqueue(i / 10000 % 10);
+                intCodes[1].Input.Enqueue(i / 1000 % 10);
+                intCodes[2].Input.Enqueue(i / 100 % 10);
+                intCodes[3].Input.Enqueue(i / 10 % 10);
+                intCodes[4].Input.Enqueue(i % 10);
+                intCodes[0].Input.Enqueue(0);
+                int output = 0;
+                bool exit = false;
+                do
                 {
-                    for (int c = 5; c <= 9; c++)
+                    for (int k = 0; k < 5; k++)
                     {
-                        for (int d = 5; d <= 9; d++)
+                        if (intCodes[k].Run(RunningMode.OutputAttached))
                         {
-                            for (int e = 5; e <= 9; e++)
-                            {
-                                if (a == b || a == c || a == d || a == e || b == c || b == d || b == e || c == d || c == e || d == e)
-                                {
-                                    continue;
-                                }
-                                var output = 0;
-                                Pointers = new int[] { 0, 0, 0, 0, 0 };
-                                var nonZeroOutput = 0;
-                                var dataA = (int[])Data.Clone();
-                                var dataB = (int[])Data.Clone();
-                                var dataC = (int[])Data.Clone();
-                                var dataD = (int[])Data.Clone();
-                                var dataE = (int[])Data.Clone();
-                                int[][] Inputs = { dataA, dataB, dataC, dataD, dataE };
-                                do
-                                {
-                                    output = IntcodeComputerRecursion(Inputs, Pointers, new int[] { a, b, c, d, e, output }, 0);
-                                    if (output != 0) nonZeroOutput = output;
-                                    //output = IntcodeComputer(dataA, new int[] { 9, output });
-                                    //output = IntcodeComputer(dataB, new int[] { 8, output });
-                                    //output = IntcodeComputer(dataC, new int[] { 7, output });
-                                    //output = IntcodeComputer(dataD, new int[] { 6, output });
-                                    //output = IntcodeComputer(dataE, new int[] { 5, output });
-                                    //Console.WriteLine("Output: " + output);
-                                } while (output != 0);
-                                if (!attempts.ContainsKey(nonZeroOutput))
-                                {
-                                    attempts[nonZeroOutput] = new int[] { a, b, c, d, e };
-                                }
-                            }
+                            exit = true;
+                        }
+                        else
+                        {
+                            output = intCodes[k].Output.Peek();
+                            intCodes[(k + 1) % 5].Input.Enqueue(intCodes[k].Output.Dequeue());
                         }
                     }
-                }
-            }
-            var best = (from att in attempts orderby att.Key descending select att).First();
-            Console.WriteLine("Best:" + best.Key + "," + best.Value[0] + best.Value[1] + best.Value[2] + best.Value[3] + best.Value[4]);
-
-
-        }
-
-
-        public static int Fetch(int mode, int[] Input, int i)
-        {
-            return (mode % 10 == 1 ? Input[i] : Input[Input[i]]);
-        }
-
-        int[] Pointers = { 0, 0, 0, 0, 0 };
-
-        public static int IntcodeComputerRecursion(int[][] Inputs, int[] Pointers, int[] signals, int depth)
-        {
-            var Input = Inputs[depth];
-            int output = 0;
-            bool initialSignalUsed = Pointers[depth]!=0;
-            for (int i = Pointers[depth]; i < Input.Length; i++)
-            {
-                int mode = Input[i] / 100;
-                switch (Input[i] % 100)
-                {
-                    case 1://add
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) + Fetch(mode / 10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 2://multiply
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) * Fetch(mode / 10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 3://input
-                        int signal;
-                        if (!initialSignalUsed)
-                        {
-                            signal = signals[depth];
-                            initialSignalUsed = true;
-                        }
-                        else
-                        {
-                            signal = signals[5];
-                        }
-                        Input[Input[i + 1]] = signal;//console in
-                        i += 1;
-                        break;
-                    case 4://output
-                        Console.WriteLine("Output, Depth " + depth + ":" + Fetch(mode, Input, i + 1));
-                        output = Fetch(mode, Input, i + 1);
-                        Pointers[depth] = i + 1;
-                        if (depth!=4)
-                        {
-                            signals[5] = output;
-                            return IntcodeComputerRecursion(Inputs, Pointers, signals, depth + 1);
-                        }
-                        else
-                        {
-                            return output;
-                        }
-                        i += 1;
-                        break;
-                    case 5://jump if true
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) != 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 6://jump if false
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) == 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 7://less than
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) < Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 8://equals
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) == Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 99://exit
-                        return output;
-
-                }
-            }
-            return Input[0];
-        }
-
-        public static int IntcodeComputer(int[] Input, int[] op3)
-        {
-            int output = 0;
-            for (int i = 0; i < Input.Length; i++)
-            {
-                int mode = Input[i] / 100;
-                switch (Input[i] % 100)
-                {
-                    case 1://add
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) + Fetch(mode / 10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 2://multiply
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) * Fetch(mode / 10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 3://input
-                        Input[Input[i + 1]] = op3.First();//console in
-                        op3 = op3.Skip(1).ToArray();
-                        i += 1;
-                        break;
-                    case 4://output
-                        //Console.WriteLine("Output:" + Fetch(mode, Input, i + 1));
-                        output = Fetch(mode, Input, i + 1);
-                        i += 1;
-                        break;
-                    case 5://jump if true
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) != 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 6://jump if false
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) == 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 7://less than
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) < Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 8://equals
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) == Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 99://exit
-                        return output;
-
-                }
-            }
-            return Input[0];
+                } while (!exit);
+                attempts2.Add(output);
+            });
+            Console.WriteLine("Day 07,P2:" + (from att in attempts2 orderby att descending select att).First());
         }
 
         public int[] TestData = { 3,23,3,24,1002,24,10,24,1002,23,-1,23,
@@ -249,5 +78,9 @@ namespace AoC2019
 27,4,27,1001,28,-1,28,1005,28,6,99,0,0,5 };
 
         public int[] Data = { 3, 8, 1001, 8, 10, 8, 105, 1, 0, 0, 21, 46, 55, 72, 85, 110, 191, 272, 353, 434, 99999, 3, 9, 1002, 9, 5, 9, 1001, 9, 2, 9, 102, 3, 9, 9, 101, 2, 9, 9, 102, 4, 9, 9, 4, 9, 99, 3, 9, 102, 5, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 2, 9, 101, 2, 9, 9, 1002, 9, 2, 9, 4, 9, 99, 3, 9, 1002, 9, 4, 9, 101, 3, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 3, 9, 101, 5, 9, 9, 1002, 9, 3, 9, 101, 3, 9, 9, 1002, 9, 5, 9, 4, 9, 99, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 99, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 99, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 101, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 1, 9, 4, 9, 99, 3, 9, 101, 1, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 1002, 9, 2, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 102, 2, 9, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 3, 9, 1001, 9, 2, 9, 4, 9, 99 };
+
+        public int[] Indexes = { 01234, 01243, 01324, 01342, 01423, 01432, 02134, 02143, 02314, 02341, 02413, 02431, 03124, 03142, 03214, 03241, 03412, 03421, 04123, 04132, 04213, 04231, 04312, 04321, 10234, 10243, 10324, 10342, 10423, 10432, 12034, 12043, 12304, 12340, 12403, 12430, 13024, 13042, 13204, 13240, 13402, 13420, 14023, 14032, 14203, 14230, 14302, 14320, 20134, 20143, 20314, 20341, 20413, 20431, 21034, 21043, 21304, 21340, 21403, 21430, 23014, 23041, 23104, 23140, 23401, 23410, 24013, 24031, 24103, 24130, 24301, 24310, 30124, 30142, 30214, 30241, 30412, 30421, 31024, 31042, 31204, 31240, 31402, 31420, 32014, 32041, 32104, 32140, 32401, 32410, 34012, 34021, 34102, 34120, 34201, 34210, 40123, 40132, 40213, 40231, 40312, 40321, 41023, 41032, 41203, 41230, 41302, 41320, 42013, 42031, 42103, 42130, 42301, 42310, 43012, 43021, 43102, 43120, 43201, 43210 };
+
+        public int[] HighIndexes = { 56789, 56798, 56879, 56897, 56978, 56987, 57689, 57698, 57869, 57896, 57968, 57986, 58679, 58697, 58769, 58796, 58967, 58976, 59678, 59687, 59768, 59786, 59867, 59876, 65789, 65798, 65879, 65897, 65978, 65987, 67589, 67598, 67859, 67895, 67958, 67985, 68579, 68597, 68759, 68795, 68957, 68975, 69578, 69587, 69758, 69785, 69857, 69875, 75689, 75698, 75869, 75896, 75968, 75986, 76589, 76598, 76859, 76895, 76958, 76985, 78569, 78596, 78659, 78695, 78956, 78965, 79568, 79586, 79658, 79685, 79856, 79865, 85679, 85697, 85769, 85796, 85967, 85976, 86579, 86597, 86759, 86795, 86957, 86975, 87569, 87596, 87659, 87695, 87956, 87965, 89567, 89576, 89657, 89675, 89756, 89765, 95678, 95687, 95768, 95786, 95867, 95876, 96578, 96587, 96758, 96785, 96857, 96875, 97568, 97586, 97658, 97685, 97856, 97865, 98567, 98576, 98657, 98675, 98756, 98765 };
     }
 }

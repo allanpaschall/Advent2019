@@ -57,15 +57,17 @@ namespace AoC2019
             {
                 i += item.Value.Paths;
             }
-            Console.WriteLine("Paths: " + i);
-            var source = dict["YOU"];
-            int result = distance(source);
-            Console.WriteLine("Part 2:" + (result-1));
+            Console.WriteLine("Day 06,P1:" + i);
+            int result = distance(dict["YOU"]);
+            Console.WriteLine("Day 06,P2:" + (result-1));//-1 here because you want to find "SAN" but not orbit "SAN"...rather, orbit the same object as "SAN"
             
         }
 
         public int distance(Orbitor source)
         {
+            //my apologies to whomever reads this........
+            //The idea is to net 0 when it doesn't work, and cascade a "+1" when it does...
+            //This is why there's so many ways to "+1" and "-1"
 
             if (source == null) return -1;
             source.Walked = 1;
@@ -77,7 +79,7 @@ namespace AoC2019
                 }
                 else if (item.Walked != 1)
                 {
-                    Console.WriteLine(source.Name + "->" + item.Name);
+                    //Console.WriteLine(source.Name + "->" + item.Name);
                     var result = distance(item)+1;
                     if (result != 0) return result;
                 }
@@ -90,12 +92,12 @@ namespace AoC2019
                 }
                 else if (source.Parent.Walked != 1)
                 {
-                    Console.WriteLine(source.Name + "->" + source.Parent.Name);
+                    //Console.WriteLine(source.Name + "->" + source.Parent.Name);
                     var result = distance(source.Parent) + 1;
                     if (result != 0) return result;
                 }
             }
-                return -1;
+            return -1;
             
         }
 

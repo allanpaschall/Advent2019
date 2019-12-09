@@ -89,8 +89,8 @@ namespace AoC2019
             }
             var Answer1 = (from i in intersections orderby i.MDistance select i).First();
             var Answer2 = (from i in intersections orderby i.Step select i).First();
-            Console.WriteLine("Answer 1:" + Answer1.MDistance);
-            Console.WriteLine("Answer 2:" + Answer2.Step);
+            Console.WriteLine("Day 03,P1:" + Answer1.MDistance);
+            Console.WriteLine("Day 03,P2:" + Answer2.Step);
         }
 
         void IterateStep(List<Point> intersections, HashSet<Point> Line1Points, HashSet<Point> points, Point CurrentPoint)
