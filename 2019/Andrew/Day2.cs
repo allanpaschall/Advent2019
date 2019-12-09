@@ -3,40 +3,24 @@ namespace AoC2019
 {
     public class Day2
     {
-        public static int Day2Part2(int[] Input)
+        public void Run()
         {
-            int x = 0;
-            int result;
+            var i = new IntCode(Day2Data);
+            i.IntCodeInstructions[1] = 12;
+            i.IntCodeInstructions[2] = 2;
+            i.Run();
+            Console.WriteLine("Day 02,P1:" + i.IntCodeInstructions[0]);
+            int x = -1;
+
             do
             {
-                int[] TempData = (int[])Input.Clone();
-                TempData[1] = x / 100;
-                TempData[2] = x % 100;
-                result = Day2Part1(TempData);
                 x++;
-            } while (result != 19690720);
-            return x;
-        }
-
-        public static int Day2Part1(int[] Input)
-        {
-
-            for (int i = 0; i < Input.Length; i += 4)
-            {
-                switch (Input[i])
-                {
-                    case 1:
-                        Input[Input[i + 3]] = Input[Input[i + 1]] + Input[Input[i + 2]];
-                        break;
-                    case 2:
-                        Input[Input[i + 3]] = Input[Input[i + 1]] * Input[Input[i + 2]];
-                        break;
-                    case 99:
-                        break;
-
-                }
-            }
-            return Input[0];
+                i = new IntCode(Day2Data);
+                i.IntCodeInstructions[1] = x / 100;
+                i.IntCodeInstructions[2] = x % 100;
+                i.Run();
+            } while (i.IntCodeInstructions[0] != 19690720);
+            Console.WriteLine("Day 02,P2:" + x);
         }
 
         public static int[] Test = { 1, 9, 10, 3, 2, 3, 11, 0, 99, 30, 40, 50 };

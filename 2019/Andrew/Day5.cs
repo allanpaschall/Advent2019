@@ -9,68 +9,18 @@ namespace AoC2019
 
         public void Run()
         {
-            IntcodeComputer((int[])Data.Clone(),1);
-            IntcodeComputer(Data, 5);
+            var i = new IntCode(Data);
+            i.Input.Enqueue(1);
+            i.Run();
+            int p1;
+            while ((p1 = i.Output.Dequeue())==0) { }
 
-        }
-
-        public static int Fetch(int mode, int[] Input, int i)
-        {
-            return (mode % 10 == 1 ? Input[i] : Input[Input[i]]);
-        }
-
-        public static int IntcodeComputer(int[] Input, int op3)
-        {
-
-            for (int i = 0; i < Input.Length; i ++)
-            {
-                int mode = Input[i] / 100;
-                switch (Input[i]%100)
-                {
-                    case 1://add
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) + Fetch(mode/10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 2://multiply
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) * Fetch(mode / 10, Input, i + 2);
-                        i += 3;
-                        break;
-                    case 3://input
-                        Input[Input[i + 1]] = op3;//console in
-                        i += 1;
-                        break;
-                    case 4://output
-                        Console.WriteLine("Output:" + Fetch(mode, Input, i + 1));
-                        i += 1;
-                        break;
-                    case 5://jump if true
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) != 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 6://jump if false
-                        i += 2;
-                        if (Fetch(mode, Input, i - 1) == 0)
-                        {
-                            i = Fetch(mode / 10, Input, i) - 1;
-                        }
-                        break;
-                    case 7://less than
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) < Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 8://equals
-                        Input[Input[i + 3]] = Fetch(mode, Input, i + 1) == Fetch(mode / 10, Input, i + 2) ? 1 : 0;
-                        i += 3;
-                        break;
-                    case 99://exit
-                        return 0;
-
-                }
-            }
-            return Input[0];
+            i = new IntCode(Data);
+            i.Input.Enqueue(5);
+            i.Run();
+            var p2 = i.Output.Dequeue();
+            Console.WriteLine("Day 05,P1:" + p1);
+            Console.WriteLine("Day 05,P2:" + p2);
         }
 
         public static int[] TestData = {3,21,1008,21,8,20,1005,20,22,107,8,21,20,1006,20,31,
