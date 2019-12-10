@@ -11,12 +11,12 @@ namespace AoC2019
             var i = new IntCode(Data);
             i.Input.Enqueue(1);
             i.Run();
-            Console.WriteLine("Day2 09,P1:" + i.Output.Dequeue());
+            Console.WriteLine("Day 09,P1:" + i.Output.Dequeue());
 
             i = new IntCode(Data);
             i.Input.Enqueue(2);
             i.Run();
-            Console.WriteLine("Day2 09,P2:" + i.Output.Dequeue());
+            Console.WriteLine("Day 09,P2:" + i.Output.Dequeue());
         }
 
         public decimal[] TestData = { 104, 1125899906842624, 99 };
