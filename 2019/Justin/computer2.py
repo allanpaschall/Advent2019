@@ -53,10 +53,10 @@ def comp(compList, inputVal, pos, baseVal):
 
         # OP outputs the value of its only parameter
         if (operation == 4):
-            print("Output: ", param1)
-            # return compList, ["input",param1], pos+2, baseVal
-            pos+=2
-            continue
+            # print("Output: ", param1)
+            return compList, ["Output",param1], pos+2, baseVal
+            # pos+=2
+            # continue
         
         if (operation == 9):
             baseVal += param1
