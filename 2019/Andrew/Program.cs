@@ -18,6 +18,8 @@ namespace AoC2019
             new Day9().Run();
             new Day10().Run();
             new Day11().Run();
+            new Day12().Run();
+            new Day13().Run(false);
             Console.WriteLine("\r\nCompleted!");
             //Console.ReadLine();
         }
@@ -40,6 +42,9 @@ Day 09,P2:59785
 Day 10,P1:309
 Day 10,P2:416
 Day 11,P1:1909
-Day 11,P2:JUFEKHPH*/
+Day 11,P2:JUFEKHPH
+Day 12,P1:9958
+Day 12,P2:318382803780324 LCM(X:28482, Y:231614, Z:193052)
+*/
     }
 }

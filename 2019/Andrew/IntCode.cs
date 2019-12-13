@@ -3,16 +3,30 @@ using System.Collections;
 using System.Collections.Generic;
 namespace AoC2019
 {
+    public delegate decimal GetInput();
     public class IntCode
     {
         public Queue<decimal> Output { get; private set; }
         public Queue<decimal> Input { get; private set; }
         private int IP { get; set; }
         private int RB { get; set; }
+        private GetInput inputCallback;
 
         public decimal[] IntCodeInstructions { get; set; }
         public IntCode(decimal[] I)
         {
+            //IntCodeInstructions = (int[])I.Clone();
+            IntCodeInstructions = new decimal[1024 * 512];
+            for (int i = 0; i < I.Length; i++)
+            {
+                IntCodeInstructions[i] = I[i];
+            }
+            Output = new Queue<decimal>();
+            Input = new Queue<decimal>();
+        }
+        public IntCode(decimal[] I, GetInput inputCallback)
+        {
+            this.inputCallback = inputCallback;
             //IntCodeInstructions = (int[])I.Clone();
             IntCodeInstructions = new decimal[1024 * 512];
             for (int i = 0; i < I.Length; i++)
@@ -50,7 +64,14 @@ namespace AoC2019
                         IP += 3;
                         break;
                     case 3://input
-                        IntCodeInstructions[GetAddress(mode, IP + 1)] = Input.Dequeue();
+                        if (inputCallback!=null)
+                        {
+                            IntCodeInstructions[GetAddress(mode, IP + 1)] = inputCallback();
+                        }
+                        else
+                        {
+                            IntCodeInstructions[GetAddress(mode, IP + 1)] = Input.Dequeue();
+                        }
                         IP += 1;
                         break;
                     case 4://output

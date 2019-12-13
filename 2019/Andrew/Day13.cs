@@ -34,10 +34,14 @@ namespace AoC2019
 
     public class Day13
     {
+        decimal ballX = 0;
+        decimal paddleX = 0;
+        decimal score = 0;
+
         public Day13()
         {
         }
-        public void Run()
+        public void Run(bool draw)
         {
             var i = new IntCode(Data);
             List<d13Point> points = new List<d13Point>();
@@ -71,9 +75,9 @@ namespace AoC2019
             var blockTiles = (from p in points where p.Type == 2 select p).Count();
             Console.WriteLine("Day 13,P1:" + blockTiles);
             Data[0] = 2;
-            i = new IntCode(Data);
+            i = new IntCode(Data,ProvideInput);
+            //i.Input.Enqueue(0);
             Dictionary<int, d13Point> screen = new Dictionary<int, d13Point>();
-            decimal score = 0;
             do
             {
                 var result = i.Run(RunningMode.OutputAttached);
@@ -87,7 +91,6 @@ namespace AoC2019
                     if (x==-1 && y==0)
                     {
                         score = type;
-                        Console.WriteLine("Score: " + score);
                     }
                     else
                     {
@@ -100,37 +103,18 @@ namespace AoC2019
                         screen[((int)y * 100) + (int)x] = p;
                         if (type==3 || type==4)
                         {
-                            DrawScreen(screen);
-                        }
-                    }
-                    if (i.Input.Count==0)
-                    {
-                        char input = ' ';
-                        if (inputstream.Length!=0)
-                        {
-                            input = inputstream[0];
-                            inputstream = inputstream.Substring(1);
-                        } else
-                        {
-                            if (Console.KeyAvailable)
-                                input = Console.ReadKey(false).KeyChar;
+                            if (type==3)
+                            {
+                                paddleX = x;
+                            }
                             else
-                                input = ' ';
-                        }
-                        if (input == ',')
-                        {
-                            i.Input.Enqueue(-1);
-                        }
-                        else if (input == '.')
-                        {
-                            i.Input.Enqueue(1);
-                        }
-                        else
-                        {
-                            i.Input.Enqueue(0);
+                            {
+                                ballX = x;
+                            }
+                            if (draw)
+                                DrawScreen(screen);
                         }
                     }
-
                 }
                 else
                 {
@@ -140,19 +124,27 @@ namespace AoC2019
             } while (true);
             Console.WriteLine("Day 13,P2:" + score);
 
-        }public string inputstream = @"   ...................                          ,,,,,,,,,,,,,,,,,"+
-            ",,,,,,,,,......,,,,....,,,...........,,,,.....,,,,,                                              "+
-            "                                                                                          ,,,,,,,,, "+
-            "...                                                                                                    "+
-            "                                                                                                       "+
-            "                                                                                                       "+
-            "                                                                               ,,                      "+
-            "                                                                                                       "+
-            "                                                                                                         "+
-            "                                                  ..                                                  " +
-            "                                                                                                   ,,,,,,,, ";
+        }
 
-        private static void DrawScreen(Dictionary<int, d13Point> screen)
+        public decimal ProvideInput()
+        {
+            char input = ' ';
+            if (paddleX > ballX) input = ',';
+            else if (paddleX < ballX) input = '.';
+            if (input == ',')
+            {
+                return -1;
+            }
+            else if (input == '.')
+            {
+                return 1;
+            }
+
+            return 0;
+        }
+
+       
+        private void DrawScreen(Dictionary<int, d13Point> screen)
         {
             for (int yy = 0; yy < 25; yy++)
             {
@@ -183,6 +175,7 @@ namespace AoC2019
                 }
                 Console.WriteLine();
             }
+            Console.WriteLine("Score: " + score);
         }
 
         public string TestData = "";
@@ -233,7 +226,7 @@ namespace AoC2019
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
-            1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
+            1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,
             89,82,95,24,35,69,73,71,23,5,87,90,41,96,87,87,72,81,29,20,53,96,2,8,39,33,34,13,46,62,86,8,11,11,32,39,61,76,43,42,88,
             15,27,80,16,28,78,86,36,49,77,74,3,72,28,18,54,58,72,17,78,93,13,29,86,61,31,89,6,1,66,51,68,42,39,27,65,2,83,12,75,75,
             92,19,75,50,62,10,2,72,56,65,15,57,28,79,47,68,41,86,90,75,96,53,61,57,83,23,76,44,9,40,6,64,94,36,68,57,12,18,56,16,66,
