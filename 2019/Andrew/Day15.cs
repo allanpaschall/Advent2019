@@ -27,11 +27,12 @@ namespace AoC2019
         public Day15()
         {
         }
-        decimal x = 21;
-        decimal y = 21;
-        decimal IntendedMove = 0;
+        long x = 21;
+        long y = 21;
+        long IntendedMove = 0;
         public void Run()
         {
+            var begin = DateTime.Now;
             int len = InputCommands.Length;
             Dictionary<int, d15Point> grid = new Dictionary<int, d15Point>();
 
@@ -120,7 +121,7 @@ namespace AoC2019
                     }
                     if (result == 2)
                     {
-                        Console.WriteLine("Day 15,P1:" + (len - InputCommands.Length));
+                        Console.WriteLine("Day 15,P1:" + (len - InputCommands.Length) + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
                         break;
                     }
                     grid[((int)y * 100) + (int)x] = new d15Point { X = (int)x, Y = (int)y, Type = (int)result + 1 };
@@ -129,6 +130,7 @@ namespace AoC2019
 
 
             //This is Part 2...it walks the grid until all '2' and '3'. Temporarily uses '4' to not poison the timeline.
+            begin = DateTime.Now;
             int count = 0;
             for (int j = 0; j < 5000; j++)
             {
@@ -178,10 +180,10 @@ namespace AoC2019
                 //DrawScreen(grid);
                 //System.Threading.Thread.Sleep(100);
             }
-            Console.WriteLine("Day 15,P2:" + count);
+            Console.WriteLine("Day 15,P2:" + count + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
 
         }
-        public decimal ProvideInput()
+        public long ProvideInput()
         {
             if (InputCommands.Length != 0)
             {
@@ -215,7 +217,7 @@ namespace AoC2019
             {
                 for (int xx = 0; xx <= 40; xx++)
                 {
-                    decimal ttype = screen.ContainsKey(((int)yy * 100) + (int)xx) ? screen[((int)yy * 100) + (int)xx].Type : 0;
+                    long ttype = screen.ContainsKey(((int)yy * 100) + (int)xx) ? screen[((int)yy * 100) + (int)xx].Type : 0;
                     char tchar = ' ';
                     switch (ttype)
                     {
@@ -244,7 +246,7 @@ namespace AoC2019
         }
 
 
-        public decimal[] Data = {
+        public long[] Data = {
             3,1033,
             1008,1033,1,1032,
             1005,1032,31,

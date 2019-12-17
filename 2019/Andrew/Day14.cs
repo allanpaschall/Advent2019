@@ -82,6 +82,7 @@ namespace AoC2019
         }
         public void Run()
         {
+            var begin = DateTime.Now;
             StoreAside.Storage = new Dictionary<string, long>();
             Dictionary<string,Chemical> chemicals = new Dictionary<string,Chemical>();
             List<Reaction> reactions = new List<Reaction>();
@@ -114,7 +115,8 @@ namespace AoC2019
             StoreAside.Storage["ORE"] = 1000000000000;
             //                          1000000000000
             var result = chemicals["FUEL"].Produce(1);
-            Console.WriteLine("Day 14,P1:" + result);
+            Console.WriteLine("Day 14,P1:" + result + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
+            begin = DateTime.Now;
             int test = 1 ;
             bool wasPriorTestTooHigh;
             do
@@ -147,7 +149,7 @@ namespace AoC2019
                 wasPriorTestTooHigh = !(StoreAside.Storage["ORE"] > 0);
             }
             while (resolution != 0);
-            Console.WriteLine("Day 14,P2:" + (test-1));
+            Console.WriteLine("Day 14,P2:" + (test-1) + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
 
 
         }

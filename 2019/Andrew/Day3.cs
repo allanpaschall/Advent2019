@@ -42,6 +42,7 @@ namespace AoC2019
         }
         public void Run()
         {
+            var begin = System.DateTime.Now;
             HashSet<Point> Line1Points = new HashSet<Point>();
             List<Point> intersections = new List<Point>();
             string data = Data;
@@ -89,7 +90,7 @@ namespace AoC2019
             }
             var Answer1 = (from i in intersections orderby i.MDistance select i).First();
             var Answer2 = (from i in intersections orderby i.Step select i).First();
-            Console.WriteLine("Day 03,P1:" + Answer1.MDistance);
+            Console.WriteLine("Day 03,P1:" + Answer1.MDistance + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
             Console.WriteLine("Day 03,P2:" + Answer2.Step);
         }
 

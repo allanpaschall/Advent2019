@@ -8,6 +8,7 @@ namespace AoC2019
         }
         public void Run(int start, int end)
         {
+            var begin = System.DateTime.Now;
             int p1 = 0;
             int p2 = 0;
             for (int i = start; i < end; i++)
@@ -30,7 +31,7 @@ namespace AoC2019
                     p2++;
                 }
             }
-            Console.WriteLine("Day 04,P1:" + p1);
+            Console.WriteLine("Day 04,P1:" + p1 + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
             Console.WriteLine("Day 04,P2:" + p2);
         }
     }

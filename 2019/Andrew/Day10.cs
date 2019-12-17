@@ -50,6 +50,7 @@ namespace AoC2019
         }
         public void Run()
         {
+            var begin = DateTime.Now;
             var d = Data;
             var lines = d.Replace("\r\n", "\n").Split('\n');
             char[][] llines = new char[lines.Length][];
@@ -145,8 +146,9 @@ namespace AoC2019
                 }
             }
             var ff = (from f in Found orderby f.Key descending select f).First();
-            Console.WriteLine("Day 10,P1:" + (from f in Found orderby f.Key descending select f).First().Key);
+            Console.WriteLine("Day 10,P1:" + (from f in Found orderby f.Key descending select f).First().Key + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
             //Console.WriteLine("X:" + ff.Value.Y + " Y:" + ff.Value.X);
+            begin = DateTime.Now;
             int destroyed = 0;
             do
             {
@@ -170,7 +172,7 @@ namespace AoC2019
                             destroyed++;
                             if (destroyed==200)
                             {
-                                Console.WriteLine("Day 10,P2:" + ((ff.Value.Y + (item.Y * m))*100 + (ff.Value.X + (item.X * m))));
+                                Console.WriteLine("Day 10,P2:" + ((ff.Value.Y + (item.Y * m))*100 + (ff.Value.X + (item.X * m))) + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
                             }
                             m = 48;
                         }

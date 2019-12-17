@@ -39,8 +39,9 @@ namespace AoC2019
     {
         public void Run()
         {
+            var begin = DateTime.Now;
             var data = Data;
-            d12Point[] Velocities = 
+            d12Point[] Velocities =
             {
                 new d12Point() { X = 0, Y = 0, Z = 0 },
                 new d12Point() { X = 0, Y = 0, Z = 0 },
@@ -64,8 +65,8 @@ namespace AoC2019
             {
                 Energy += data[i] * Velocities[i];
             }
-            Console.WriteLine("Day 12,P1:" + Energy);
-
+            Console.WriteLine("Day 12,P1:" + Energy + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
+            begin = DateTime.Now;
             for (int j = 0; j < 300000; j++)
             {
                 var gravity = DetermineGravity(data, Velocities);
@@ -82,25 +83,25 @@ namespace AoC2019
             int maxZ = 0;
             for (int k = 700; k < 299960; k++)
             {
-                for (int j = k+1; j < 299960; j++)
+                for (int j = k + 1; j < 299960; j++)
                 {
-                    if (maxX!=0 && maxY !=0 && maxZ!=0)
+                    if (maxX != 0 && maxY != 0 && maxZ != 0)
                     {
-                        k = int.MaxValue-1;
-                        j = int.MaxValue-1;
+                        k = int.MaxValue - 1;
+                        j = int.MaxValue - 1;
                         break;
                     }
-                    if (maxX==0 && points[j].X == points[k].X &&
-                        points[j + 1].X == points[k+1].X &&
-                        points[j + 2].X == points[k+2].X &&
-                        points[j + 3].X == points[k+3].X &&
-                        points[j + 4].X == points[k+4].X &&
-                        points[j + 5].X == points[k+5].X &&
-                        points[j + 6].X == points[k+6].X &&
-                        points[j + 7].X == points[k+7].X &&
-                        points[j + 8].X == points[k+8].X &&
-                        points[j + 9].X == points[k+9].X &&
-                        points[j + 10].X == points[k+10].X &&
+                    if (maxX == 0 && points[j].X == points[k].X &&
+                        points[j + 1].X == points[k + 1].X &&
+                        points[j + 2].X == points[k + 2].X &&
+                        points[j + 3].X == points[k + 3].X &&
+                        points[j + 4].X == points[k + 4].X &&
+                        points[j + 5].X == points[k + 5].X &&
+                        points[j + 6].X == points[k + 6].X &&
+                        points[j + 7].X == points[k + 7].X &&
+                        points[j + 8].X == points[k + 8].X &&
+                        points[j + 9].X == points[k + 9].X &&
+                        points[j + 10].X == points[k + 10].X &&
                         points[j + 11].X == points[k + 11].X &&
                         points[j + 12].X == points[k + 12].X &&
                         points[j + 13].X == points[k + 13].X &&
@@ -133,9 +134,9 @@ namespace AoC2019
                         points[j + 40].X == points[k + 40].X)
                     {
                         bool good = true;
-                        for (int l = 0; l < (j-k); l++)
+                        for (int l = 0; l < (j - k); l++)
                         {
-                            if (points[j+l].X != points[k+l].X)
+                            if (points[j + l].X != points[k + l].X)
                             {
                                 //bad
                                 good = false;
@@ -146,7 +147,7 @@ namespace AoC2019
                                 l = (j - k);
                             }
                         }
-                        if (good && (j-k) > 1000)
+                        if (good && (j - k) > 1000)
                         {
                             maxX = (j - k);
                         }
@@ -280,8 +281,8 @@ namespace AoC2019
                 }
 
             }
-            decimal answer = ((decimal)maxX * (decimal)maxY * (decimal)maxZ)/4M;
-            Console.WriteLine("Day 12,P2:" + answer + " LCM(" + "X:" + maxX + ", Y:" + maxY + ", Z:" + maxZ + ")");
+            decimal answer = ((decimal)maxX * (decimal)maxY * (decimal)maxZ) / 4M;
+            Console.WriteLine("Day 12,P2:" + answer + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");// + " LCM(" + "X:" + maxX + ", Y:" + maxY + ", Z:" + maxZ + ")");
 
         }
 

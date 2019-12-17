@@ -34,15 +34,16 @@ namespace AoC2019
 
     public class Day13
     {
-        decimal ballX = 0;
-        decimal paddleX = 0;
-        decimal score = 0;
+        long ballX = 0;
+        long paddleX = 0;
+        long score = 0;
 
         public Day13()
         {
         }
         public void Run(bool draw)
         {
+            var begin = DateTime.Now;
             var i = new IntCode(Data);
             List<d13Point> points = new List<d13Point>();
             //i.Input.Enqueue();
@@ -73,7 +74,8 @@ namespace AoC2019
             } while (true);
 
             var blockTiles = (from p in points where p.Type == 2 select p).Count();
-            Console.WriteLine("Day 13,P1:" + blockTiles);
+            Console.WriteLine("Day 13,P1:" + blockTiles + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
+            begin = DateTime.Now;
             Data[0] = 2;
             i = new IntCode(Data,ProvideInput);
             //i.Input.Enqueue(0);
@@ -122,11 +124,11 @@ namespace AoC2019
                 }
 
             } while (true);
-            Console.WriteLine("Day 13,P2:" + score);
+            Console.WriteLine("Day 13,P2:" + score + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
 
         }
 
-        public decimal ProvideInput()
+        public long ProvideInput()
         {
             char input = ' ';
             if (paddleX > ballX) input = ',';
@@ -150,7 +152,7 @@ namespace AoC2019
             {
                 for (int xx = 0; xx < 80; xx++)
                 {
-                    decimal ttype = screen.ContainsKey(((int)yy * 100) + (int)xx) ? screen[((int)yy * 100) + (int)xx].Type : 0;
+                    long ttype = screen.ContainsKey(((int)yy * 100) + (int)xx) ? screen[((int)yy * 100) + (int)xx].Type : 0;
                     char tchar = ' ';
                     switch (ttype)
                     {
@@ -180,7 +182,7 @@ namespace AoC2019
 
         public string TestData = "";
 
-        public decimal[] Data = {1,380,379,385,1008,2875,924596,381,1005,381,12,99,109,2876,1101,0,0,383,1102,0,1,382,21001,382,0,1,
+        public long[] Data = {1,380,379,385,1008,2875,924596,381,1005,381,12,99,109,2876,1101,0,0,383,1102,0,1,382,21001,382,0,1,
             21002,383,1,2,21102,1,37,0,1106,0,578,4,382,4,383,204,1,1001,382,1,382,1007,382,43,381,1005,381,22,1001,383,1,383,
             1007,383,26,381,1005,381,18,1006,385,69,99,104,-1,104,0,4,386,3,384,1007,384,0,381,1005,381,94,107,0,384,381,1005,381,108,
             1106,0,161,107,1,392,381,1006,381,161,1101,-1,0,384,1105,1,119,1007,392,41,381,1006,381,161,1102,1,1,384,21001,392,0,1,

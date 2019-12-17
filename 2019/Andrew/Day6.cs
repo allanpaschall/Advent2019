@@ -35,6 +35,7 @@ namespace AoC2019
         }
         public void Run()
         {
+            var begin = System.DateTime.Now;
             Dictionary<string, Orbitor> dict = new Dictionary<string, Orbitor>();
             string d = Data;
             string[] lists = d.Replace("\r\n","\n").Split('\n');
@@ -57,9 +58,10 @@ namespace AoC2019
             {
                 i += item.Value.Paths;
             }
-            Console.WriteLine("Day 06,P1:" + i);
+            Console.WriteLine("Day 06,P1:" + i + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
+            begin = System.DateTime.Now;
             int result = distance(dict["YOU"]);
-            Console.WriteLine("Day 06,P2:" + (result-1));//-1 here because you want to find "SAN" but not orbit "SAN"...rather, orbit the same object as "SAN"
+            Console.WriteLine("Day 06,P2:" + (result-1) + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");//-1 here because you want to find "SAN" but not orbit "SAN"...rather, orbit the same object as "SAN"
             
         }
 
