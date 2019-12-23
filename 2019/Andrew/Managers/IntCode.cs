@@ -3,13 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 namespace AoC2019
 {
-    public delegate long GetInput();
+    public delegate long GetInput(int ThreadID);
     public class IntCode
     {
         public Queue<long> Output { get; private set; }
         public Queue<long> Input { get; private set; }
         private int IP { get; set; }
         private int RB { get; set; }
+        public int ThreadID { get; set; }
         private GetInput inputCallback;
 
         public long[] IntCodeInstructions { get; set; }
@@ -24,8 +25,9 @@ namespace AoC2019
             Output = new Queue<long>();
             Input = new Queue<long>();
         }
-        public IntCode(long[] I, GetInput inputCallback)
+        public IntCode(long[] I, GetInput inputCallback, int ThreadID = -1)
         {
+            this.ThreadID = ThreadID;
             this.inputCallback = inputCallback;
             //IntCodeInstructions = (int[])I.Clone();
             IntCodeInstructions = new long[1024 * 512];
@@ -48,10 +50,12 @@ namespace AoC2019
 
         public bool Run(RunningMode runningMode = RunningMode.OutputUnattached)
         {
+            int timer = 0;
             if (runningMode == RunningMode.OutputUnattached)
                 IP = 0;
             for (; IP < IntCodeInstructions.Length; IP++)
             {
+                timer++;
                 int mode = (int)IntCodeInstructions[IP] / 100;
                 switch (IntCodeInstructions[IP] % 100)
                 {
@@ -66,7 +70,7 @@ namespace AoC2019
                     case 3://input
                         if (inputCallback!=null)
                         {
-                            IntCodeInstructions[GetAddress(mode, IP + 1)] = inputCallback();
+                            IntCodeInstructions[GetAddress(mode, IP + 1)] = inputCallback(ThreadID);
                         }
                         else
                         {
@@ -104,6 +108,11 @@ namespace AoC2019
                     case 99://exit
                         return true;
                 }
+                if (timer>=25 && runningMode== RunningMode.Timed)
+                {
+                    IP += 1;
+                    return false;
+                }
             }
             return true;
         }
@@ -112,6 +121,37 @@ namespace AoC2019
     public enum RunningMode
     {
         OutputUnattached,
-        OutputAttached
+        OutputAttached,
+        Timed
     }
+
+
+    /*var cp = new System.CodeDom.Compiler.CompilerParameters {
+  ReferencedAssemblies.Add(filesystemLocation), // like /R: option on csc.exe
+  GenerateInMemory = true,    // you will get a System.Reflection.Assembly back
+  GenerateExecutable = false, // Dll
+  IncludeDebugInformation = false,
+  CompilerOptions = ""
+};
+
+var csharp = new Microsoft.CSharp.CSharpCodeProvider();
+
+// this actually runs csc.exe:
+System.CodeDom.Compiler.CompilerResults cr = 
+      csharp.CompileAssemblyFromSource(cp, LiteralSource);
+
+
+// cr.Output contains the output from the command
+
+if (cr.Errors.Count != 0)
+{
+    // handle errors
+}
+
+System.Reflection.Assembly a = cr.CompiledAssembly;
+
+// party on the type here, either via reflection...
+System.Type t = a.GetType("TheDynamicallyGeneratedType");
+
+// or via a wellknown interface*/
 }
