@@ -19,7 +19,7 @@ namespace AoC2019
                 .Replace("\r\n","\n")
                 .Split('\n');
             Console.WriteLine("Day 22,P1:" + FindPosition(lines, 2019, 10007) + ", completed in " + (DateTime.Now - begin).TotalMilliseconds + " milliseconds");
-            //Console.WriteLine(FindCard(lines, 4649, 10007, 1) + " ");
+            Console.WriteLine(FindCard(lines, 4649, 10007, 1) + " ");
             begin = DateTime.Now;
             Console.WriteLine("Day 22,P2:" + FindCard(lines, 2020, 119315717514047, 101741582076661) + ", completed in " + (DateTime.Now - begin).TotalMilliseconds + " milliseconds");
 
@@ -98,6 +98,10 @@ namespace AoC2019
             }
 
             BigInteger increment = BigInteger.ModPow(multiplier, times, numberCards);
+            //var a = offset * (1 - increment);
+            //var b = ModInv((1 - multiplier) % numberCards, numberCards);
+            //var c = increment * cardNumber;
+
 
             return ((offset * (1 - increment) *
                 ModInv((1 - multiplier) % numberCards, numberCards) % numberCards) + (increment * cardNumber)) % numberCards;

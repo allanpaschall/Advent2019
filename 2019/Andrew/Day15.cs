@@ -183,7 +183,7 @@ namespace AoC2019
             Console.WriteLine("Day 15,P2:" + count + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
 
         }
-        public long ProvideInput()
+        public long ProvideInput(int ThreadID)
         {
             if (InputCommands.Length != 0)
             {

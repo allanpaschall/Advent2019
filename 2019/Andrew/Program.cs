@@ -29,6 +29,7 @@ namespace AoC2019
             new Day20.Day20().Run();
             new Day21().Run();
             new Day22().Run();
+            new Day23().Run();
             Console.WriteLine("\r\nCompleted!");
             //Console.ReadLine();
         }
@@ -62,6 +63,19 @@ Day 15,P1:210
 Day 15,P2:290
 Day 16,P1:61149209, completed in 190.753 milliseconds
 Day 16,P2:16178430, completed in 4052.281 milliseconds
-*/
+Day 17,P1:1544, completed in 8.057 milliseconds
+Day 17,P2:696373, completed in 14.655 milliseconds
+Day 18,P1:4228, completed in 9677.624 milliseconds
+Day 18,P2:1858, completed in 35110.4 milliseconds
+Day 19,P1:171, completed in 247.802 milliseconds
+Day 19,P2:9741242, completed in 15578.824 milliseconds
+Day 20,P1:528, completed in 4596.529 milliseconds
+Day 20,P2:6214, completed in 34.522 milliseconds
+Day 21,P1:19349722, completed in 4.89 milliseconds
+Day 21,P1:1141685254, completed in 89.661 milliseconds
+Day 22,P1:4649, completed in 0.569 milliseconds
+Day 22,P2:68849657493596, completed in 6.791 milliseconds
+Day 23,P1:21664, completed in 59.983 milliseconds
+Day 23,P2:16150, completed in 2183.048 milliseconds*/
     }
 }

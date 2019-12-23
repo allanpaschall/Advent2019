@@ -95,7 +95,7 @@ namespace AoC2019
             Console.WriteLine("Day 17,P2:" + output + ", completed in " + (System.DateTime.Now - begin).TotalMilliseconds + " milliseconds");
         }
 
-        public long ProvideInput()
+        public long ProvideInput(int ThreadID)
         {
             char a = answer[0];
             answer = answer.Substring(1);

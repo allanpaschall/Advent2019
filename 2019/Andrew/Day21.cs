@@ -8,13 +8,13 @@ namespace AoC2019
         public Day21()
         {
         }
-        public long ProvideInputPart1()
+        public long ProvideInputPart1(int ThreadID)
         {
             char answer = answerP1[0];
             answerP1 = answerP1.Substring(1);
             return (long)answer;
         }
-        public long ProvideInputPart2()
+        public long ProvideInputPart2(int ThreadID)
         {
             char answer = answerP2[0];
             answerP2 = answerP2.Substring(1);

@@ -128,7 +128,7 @@ namespace AoC2019
 
         }
 
-        public long ProvideInput()
+        public long ProvideInput(int ThreadID)
         {
             char input = ' ';
             if (paddleX > ballX) input = ',';
